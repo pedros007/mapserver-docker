@@ -1,0 +1,81 @@
+MAP
+		DEBUG		5
+	OUTPUTFORMAT
+		NAME png24
+		DRIVER "AGG/PNG"
+		MIMETYPE "image/png"
+		IMAGEMODE RGB
+		EXTENSION "png"
+	END
+	
+	OUTPUTFORMAT
+		NAME jpeg
+		DRIVER "AGG/JPEG"
+		MIMETYPE "image/jpeg"
+		IMAGEMODE RGB
+		EXTENSION "jpg"
+	END
+	
+	# How to return GeoJSON for Mapserver vector layers?
+	# http://mapserver.org/output/ogr_output.html
+	# https://github.com/mapserver/msautotest/blob/master/wxs/wfs_ogr.map
+	OUTPUTFORMAT
+		NAME "geojson"
+		DRIVER "OGR/GEOJSON"
+		MIMETYPE "application/json; subtype=geojson"
+		FORMATOPTION "STORAGE=memory"
+		FORMATOPTION "FORM=SIMPLE"
+		FORMATOPTION "LCO:WRITE_BBOX=YES"
+	END
+	
+	IMAGETYPE PNG24
+	IMAGECOLOR 255 255 255
+
+	# Write log to /var/log/mapserver.stderr (make sure the file exists) to see error log.
+	#CONFIG "MS_ERRORFILE" stderr
+	CONFIG "MS_ERRORFILE" /var/log/mapserver.stderr
+
+	EXTENT -180 -90 180 90
+
+	PROJECTION
+		# Performance optimization: Instead of specifying 4326, set all the Proj4 parameters directly.
+		# http://mapserver.org/optimization/mapfile.html#projections
+		# http://spatialreference.org/ref/epsg/4326/proj4/
+		#"init=epsg:4326"
+		"proj=longlat"
+		"ellps=WGS84"
+		"datum=WGS84"
+		"no_defs"
+	END
+
+	WEB
+		# Uncomment the following and run `touch /var/log/mapserver_output.log` to see access log.
+		LOG /var/log/mapserver_output.log
+
+		# Note: You should configure your webserver (ie. NGINX) to use
+		# proxy_pass to forward all Mapserver traffic to
+		# localhost:8080. Otherwise, edit ows_onlineresource
+		# accordingly.
+		METADATA
+			"ows_title" "raster_layer"
+			"ows_onlineresource" "http://localhost:8000?"
+			"ows_srs" "EPSG:4326 EPSG:900913"
+			"ows_enable_request" "*"
+			"wms_srs" "EPSG:4326 EPSG:900913"
+			"wms_feature_info_mime_type" "text/html"
+			"wfs_getfeature_formatlist" "ogrgml,geojson"
+		END
+	END
+
+	MAXSIZE 4096
+
+	LAYER
+		NAME		raster_layer
+		TILEINDEX       "/usr/src/mapfiles/tile_index.shp"
+		STATUS		OFF
+		TYPE		RASTER
+		PROCESSING	"BANDS=1,2,3"
+		#DEBUG		5
+	END
+	#DEBUG 5
+END # mapfile
