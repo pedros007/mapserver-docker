@@ -25,7 +25,7 @@ cd /tmp/gdal-2.1.1
     --with-perl=no \
     --with-python=no \
     --with-webp=no \
-    --with-xerces=no 2>&1 | less
+    --with-xerces=no
 
 make -j ${NUMCPU}
 make install
