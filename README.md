@@ -85,8 +85,9 @@ Configure the VSI driver for increased performance:
 
 Docs
 ====
--[VSI S3 File Handler in GDAL](http://www.gdal.org/cpl__vsi_8h.html#a5b4754999acd06444bfda172ff2aaa16)
--[How to use GDAL S3 drivers in MapServer?](http://osgeo-org.1560.x6.nabble.com/How-to-use-GDAL-S3-drivers-in-MapServer-td5270663.html#a5270698)
--[Virtual File System via Mapserver](http://mapserver.org/input/virtual-file.html)
--[VSI to read compressed files](https://trac.osgeo.org/gdal/wiki/UserDocs/ReadInZip#vsicurl-toreadfromHTTPorFTPfilespartialdownloading)
+
+- [VSI S3 File Handler in GDAL](http://www.gdal.org/cpl__vsi_8h.html#a5b4754999acd06444bfda172ff2aaa16)
+- [How to use GDAL S3 drivers in MapServer?](http://osgeo-org.1560.x6.nabble.com/How-to-use-GDAL-S3-drivers-in-MapServer-td5270663.html#a5270698)
+- [Virtual File System via Mapserver](http://mapserver.org/input/virtual-file.html)
+- [VSI to read compressed files](https://trac.osgeo.org/gdal/wiki/UserDocs/ReadInZip#vsicurl-toreadfromHTTPorFTPfilespartialdownloading)
  
