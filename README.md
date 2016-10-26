@@ -1,6 +1,7 @@
 Render GeoTIFFs stored in AWS S3 via Mapserver-7.0.2 and gdal-2.1.1.
 
-    docker run --rm -it -p 8000:80 -v /Users/pschmitt/src/vsis3mapserver/myMapfiles:/usr/src/mapfiles pedros007/mapserver-hackathon
+    docker build -t mapserver-docker
+    docker run --rm -it -p 8000:80 -v /Users/pschmitt/src/vsis3mapserver/myMapfiles:/usr/src/mapfiles mapserver-docker
 
 If using a private S3 bucket, you will need to [set AWS credentials in aws_credentials.inc.map](https://lists.osgeo.org/pipermail/mapserver-users/2016-October/079418.html) to use the `/vsis3/` driver.
 
