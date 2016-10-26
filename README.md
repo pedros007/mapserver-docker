@@ -27,10 +27,9 @@ How big is the mosaic in S3?
     bucket = s3.Bucket("pschmitt-test")
     sum([obj.size for obj in bucket.objects.filter(Prefix="bucket-o-tiffs/raster_tiles/").all()]) / 1024 / 1024 / 1024
 
-Construct tile index using VSICurl
+Update tileindex of filenames to have full /vsis3/ paths:
 
-    gdaltindex tile_index.shp $(for file in $(dbfdump tile_index.dbf | grep -o "[0-3]\{12\}.tif"); do echo /vsicurl/http://pschmitt-test.s3-website-us-east-1.amazonaws.com/bucket-o-tiffs/$file; done)
-	env CPL_VSIL_CURL_ALLOWED_EXTENSIONS=".tif" VSI_CACHE=TRUE VSI_CACHE_SIZE=100000000 gdaltindex tile_index.shp $(for file in $(dbfdump public/tile_index.dbf | grep -o "[0-3]\{12\}.tif"); do echo /vsis3/pschmitt-test/bucket-o-tiffs/$file; done)
+	ogr2ogr vsi_tindex.shp tindex.shp -sql "SELECT CONCAT('/vsis3/pschmitt-test/bucket-o-tiffs/raster_tiles/',location) as location FROM tile_index"
 
 Bucket policy open to world.  Careful with this!  Works with the `/vsicurl/` driver.  We recommend the `/vsis3/` driver and AWS credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,`AWS_SESSION_TOKEN`) to restrict access.
 
@@ -46,11 +45,6 @@ Bucket policy open to world.  Careful with this!  Works with the `/vsicurl/` dri
             }
         ]
     }
-
-Construct tile index using vsis3, which requires AWS credentials (Note you may also need `AWS_SESSION_TOKEN` ):
-
-    time env AWS_ACCESS_KEY_ID=foo AWS_SECRET_ACCESS_KEY=bar CPL_VSIL_CURL_ALLOWED_EXTENSIONS=".tif" VSI_CACHE=TRUE VSI_CACHE_SIZE=100000000 gdaltindex vsis3_tile_index.shp $(for file in $(dbfdump tile_index.dbf | grep -o "[0-3]\{12\}.tif"); do echo /vsis3/pschmitt-test/bucket-o-tiffs/raster_tiles/$file; done)
-
 
 Performance Optimizations
 =========================
