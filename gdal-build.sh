@@ -2,8 +2,8 @@
 
 NUMCPU=$(grep --count ^processor /proc/cpuinfo)
 
-curl http://download.osgeo.org/gdal/2.1.1/gdal-2.1.1.tar.gz | tar zxv -C /tmp
-cd /tmp/gdal-2.1.1
+curl http://download.osgeo.org/gdal/2.1.2/gdal-2.1.2.tar.gz | tar zxv -C /tmp
+cd /tmp/gdal-2.1.2
 
 ./configure \
     --prefix=/usr \
