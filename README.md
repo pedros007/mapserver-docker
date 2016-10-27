@@ -5,7 +5,7 @@ Mapserver-7.0 can render imagery stored in an AWS S3 bucket using a file handler
 
 VSI file handlers
 =================
-Before configuring Mapserver to render imagery stored in an S3 bucket, ensure that gdalinfo can access the files on the command line.
+Before configuring Mapserver to render imagery stored in an S3 bucket, ensure that `gdalinfo` can access the files on the command line.
 
 - [/vsicurl/](http://gdal.org/cpl__vsi_8h.html#a4f791960f2d86713d16e99e9c0c36258) can read from a static website, for example one hosted on S3.  For example, [this Landsat scene](http://landsat-pds.s3.amazonaws.com/L8/001/003/LC80010032014272LGN00/index.html) can be accessed via its /vsicurl/ driver.
 
@@ -18,7 +18,7 @@ Before configuring Mapserver to render imagery stored in an S3 bucket, ensure th
 Preparing imagery
 =================
 
-The format & layout of your data have a critical impact on Mapserver performance.  This is especially important when using the vsicurl drivers. To achieve high performance, you need to miniize the amount of data that needs to be transferred.
+The format & layout of your data have a critical impact on Mapserver performance.  This is especially important when using the vsicurl drivers. To achieve high performance, you need to minimize the amount of data that needs to be transferred.
 
 I typically start with imagery stored as a GeoTIFF. [Lossy JPEG compression can make your data dramatically smaller with little visual impact](http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html). Internal tiling the data improves random access performance. Generating overviews (aka pyramids) minimizes the amount of data required at various zoom levels.  GDAL can be used to prepare a file with these considerations in mind:
 
@@ -30,7 +30,7 @@ If you are using an mask band, you may need to add the flag `--config GDAL_TIFF_
 Layer configuration
 ===================
 
-If you are using `/vsis3/`, set the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and optionally `AWS_SESSION_TOKEN` credentials with `CONFIG key value` in the MAP object of your [mapfile](http://mapserver.org/mapfile/map.html).  As mentionned in the doc, it is for MapServer config options, but also for any GDAL config option.
+If you are using `/vsis3/`, set the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and optionally `AWS_SESSION_TOKEN` credentials with `CONFIG key value` in the MAP object of your [mapfile](http://mapserver.org/mapfile/map.html).  As mentioned in the doc, it is for MapServer config options, but also for any GDAL config option.
 
 Single image
 ------------
@@ -69,7 +69,7 @@ Once you have the tile index, set your LAYER like so:
 Performance Improvement: Single image
 ======================================
 
-Mapserver renders a single image _much_ faster than a collection of images in a tileindex ([Read Frank Warmerdam's explanation on mapserver-users](http://osgeo-org.1560.x6.nabble.com/UMN-MAPSERVER-USERS-GeoTIFF-overviews-TILEINDEX-Large-dataset-performance-tt4301064.html#a4301084)).  This is esepcially true when using the VSI drivers, as reading GeoTIFF headers via HTTP GET Range Requests is even slower than direct disk access.
+Mapserver renders a single image _much_ faster than a collection of images in a tileindex ([Read Frank Warmerdam's explanation on mapserver-users](http://osgeo-org.1560.x6.nabble.com/UMN-MAPSERVER-USERS-GeoTIFF-overviews-TILEINDEX-Large-dataset-performance-tt4301064.html#a4301084)).  This is especially true when using the VSI drivers, as reading GeoTIFF headers via HTTP GET Range Requests is even slower than direct disk access.
 
 Here's how to generate a single 16m GeoTIFF:
 
@@ -93,12 +93,7 @@ Configure your Mapserver MAPFILE to use appropriate [MINSCALEDENOM](http://mapse
     	LAYER
     		NAME		raster_layer_hires
     		GROUP		raster_layer
-    		METADATA
-    			"ows_title"	"raster_layer_hires"
-    			"ows_srs"	"epsg:4326"
-    		END
     		TILEINDEX       "/usr/src/mapfiles/tile_index.shp"
-    		STATUS		OFF
     		TYPE		RASTER
     		MINSCALEDENOM 0
     		MAXSCALEDENOM 31249
