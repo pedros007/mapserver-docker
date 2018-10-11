@@ -131,7 +131,7 @@ A sample mapfile is available at `mapfiles/mapfile.map`.
 
 Once the container is running, render images via [OpenLayers](https://openlayers.org/) or WMS request:
 
-    http://localhost:8000/mapserv?LAYERS=raster_layer&FORMAT=image%2Fpng&MAP/usr/src/mapfiles/mapfile.map&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A4326&BBOX=57.00,27.05,57.01,27.06&WIDTH=256&HEIGHT=256
+    http://localhost:8000/mapserv?LAYERS=raster_layer&FORMAT=image%2Fpng&MAP=/usr/src/mapfiles/mapfile.map&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A4326&BBOX=57.00,27.05,57.01,27.06&WIDTH=256&HEIGHT=256
 
 Handy things
 ============
