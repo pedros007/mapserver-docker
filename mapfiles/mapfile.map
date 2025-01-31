@@ -32,8 +32,6 @@ MAP
 
 	# Write log to /var/log/mapserver.stderr (make sure the file exists) to see error log.
 	CONFIG "MS_ERRORFILE" "stderr"
-	#CONFIG "MS_ERRORFILE" "/var/log/mapserver.stderr"
-	INCLUDE "aws_credentials.inc.map"
 	CONFIG "CPL_VSIL_CURL_ALLOWED_EXTENSIONS" ".tif" # .shp .shx .dbf .qix .cpg .prj
 	CONFIG "VSI_CACHE" "TRUE"
 	# cache size in bytes
@@ -45,11 +43,11 @@ MAP
 		# Performance optimization: Instead of specifying 4326, set all the Proj4 parameters directly.
 		# http://mapserver.org/optimization/mapfile.html#projections
 		# http://spatialreference.org/ref/epsg/4326/proj4/
-		#"init=epsg:4326"
-		"proj=longlat"
-		"ellps=WGS84"
-		"datum=WGS84"
-		"no_defs"
+		"init=epsg:4326"
+		#"proj=longlat"
+		#"ellps=WGS84"
+		#"datum=WGS84"
+		#"no_defs"
 	END
 
 	WEB
@@ -67,6 +65,7 @@ MAP
 			"ows_enable_request" "*"
 			"wms_srs" "EPSG:4326"
 			"wms_feature_info_mime_type" "text/html"
+			"wms_allow_getmap_without_styles" "true"
 			"wfs_getfeature_formatlist" "ogrgml,geojson"
 		END
 	END
@@ -74,45 +73,14 @@ MAP
 	MAXSIZE 4096
 
 	LAYER
-		NAME		raster_layer_lowres
-		GROUP		raster_layer
+		NAME		raster_layer
 		METADATA
 			"ows_title"	"raster_layer_lowres"
 			"ows_srs"	"epsg:4326"
 		END
-		#DATA		"/vsicurl/http://pschmitt-test.s3-website-us-east-1.amazonaws.com/lowres/mosaic_z13.tif"
-		DATA		"/vsis3/pschmitt-test/lowres/mosaic_z13.tif"
+		DATA		"/vsicurl/https://github.com/OSGeo/gdal/raw/86193bf5942fb63b91b06a18df78efc73a2d869b/autotest/gdrivers/data/gtiff/int8.tif"
 		STATUS		OFF
 		TYPE		RASTER
-
-		MINSCALEDENOM 31250
 	END
 
-	LAYER
-		NAME		raster_layer_hires
-		GROUP		raster_layer
-		METADATA
-			"ows_title"	"raster_layer_hires"
-			"ows_srs"	"epsg:4326"
-		END
-		TILEINDEX       "/usr/src/mapfiles/tile_index.shp"
-		STATUS		OFF
-		TYPE		RASTER
-		MINSCALEDENOM 0
-		MAXSCALEDENOM 31249
-	END
-
-	LAYER
-		NAME cutlines
-		TYPE LINE
-		STATUS OFF
-		#DATA "/vsicurl/http://pschmitt-test.s3-website-us-east-1.amazonaws.com/bucket-o-tiffs/cutlines.shp"
-		DATA "/vsis3/pschmitt-test/bucket-o-tiffs/cutlines.shp"
-		CLASS
-			STYLE
-				WIDTH 2
-				COLOR 0 255 0
-			END
-		END
-	END
 END # mapfile
