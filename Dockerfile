@@ -1,4 +1,6 @@
-FROM ghcr.io/osgeo/gdal:ubuntu-full-3.10.1
+FROM ghcr.io/osgeo/gdal:ubuntu-full-3.10.3
+
+ARG MAPSERVER_VERSION=8.4.0
 
 RUN \
 # AWS CLI can be helpful with debugging
@@ -48,9 +50,9 @@ RUN \
     protobuf-c-compiler \
     libprotobuf-c-dev && \
 # Build MapServer using libproj from the GDAL Docker
-    curl https://download.osgeo.org/mapserver/mapserver-8.4.0.tar.gz | tar zx -C /tmp && \
-    mkdir /tmp/mapserver-8.4.0/build && \
-    cd /tmp/mapserver-8.4.0/build && \
+    curl https://download.osgeo.org/mapserver/mapserver-${MAPSERVER_VERSION}.tar.gz | tar zx -C /tmp && \
+    mkdir /tmp/mapserver-${MAPSERVER_VERSION}/build && \
+    cd /tmp/mapserver-${MAPSERVER_VERSION}/build && \
     cmake .. \
       -DWITH_CURL=1 \
       -DWITH_CAIRO=1 \
